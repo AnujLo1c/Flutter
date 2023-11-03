@@ -7,7 +7,7 @@ class FirebaseAuthService{
           return credential.user;
     }
     catch(e){
-      print("Some error");
+      print("Some error"+e.toString());
     }
     return null;
   }

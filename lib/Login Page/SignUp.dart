@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:templates/Login%20Page/resourses/fire_auth_imple/firebase_auth.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -9,12 +11,23 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final FirebaseAuthService _auth=FirebaseAuthService();
   final _akey = GlobalKey<FormState>();
   TextEditingController _name=TextEditingController();
   TextEditingController _email=TextEditingController();
   TextEditingController _phone=TextEditingController();
   TextEditingController _pass=TextEditingController();
   TextEditingController _cpass=TextEditingController();
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _name.dispose();
+    _email.dispose();
+    _pass.dispose();
+    _cpass.dispose();
+    _phone.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,6 +206,7 @@ controller: _cpass,
                         width: 120,
                         child: ElevatedButton(
                           onPressed: () {
+                            _signUp();
                             if (_akey.currentState!.validate()) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text("Creating...")),
@@ -241,5 +255,20 @@ controller: _cpass,
         ),
       ),
     );
+  }
+  void _signUp() async{
+    String username=_name.text;
+    String email=_email.text;
+    String phone=_phone.text;
+    String pass=_pass.text;
+    String cpass=_cpass.text;
+    User? user=await _auth.signUpWithEmailAndPassword(email, pass);
+if(user !=null){
+  print("Cretated");
+  Navigator.pushNamed(context, "/Forgetpass");
+}
+else{
+  print("errror");
+}
   }
 }
